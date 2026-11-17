@@ -1,0 +1,43 @@
+# firmware secrets
+firmware/include/secrets.h
+firmware/include/mqtt_ca.h
+arduino/IotFireSystem_ArduinoIDE/secrets.h
+arduino/IotFireSystem_ArduinoIDE/mqtt_ca.h
+.pio/
+
+# backend
+backend/bin/
+backend/obj/
+backend/appsettings.Development.json
+
+# frontend
+frontend/node_modules/
+frontend/dist/
+frontend/android/app/google-services.json
+frontend/android/app/*.jks
+frontend/android/app/*.keystore
+**/release-signing.properties
+**/*release*.jks
+**/*release*.keystore
+frontend/android/.gradle/
+frontend/android/local.properties
+frontend/android/app/build/
+
+# Firebase credentials
+**/*service-account*.json
+**/*service_account*.json
+**/serviceAccountKey.json
+**/firebase-admin*.json
+**/firebase-service-account.json
+**/*firebase-adminsdk*.json
+
+# MQTT secret
+mosquitto/config/password_file
+
+# generic
+.env
+.vscode/
+.idea/
+
+# Generated release binaries (publish as GitHub Release assets, not Git blobs)
+release/*.apk

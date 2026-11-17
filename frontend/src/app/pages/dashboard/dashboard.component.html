@@ -1,0 +1,164 @@
+<svg class="icon-sprite" aria-hidden="true">
+  <symbol id="icon-brand" viewBox="0 0 24 24"><path d="M13.5 2.2c.5 3-1.2 4.2-2.2 5.6-1.1 1.5-1.3 3 .1 4.2-.1-2.1 1.4-3.2 2.5-4.5.2 2.4 2.7 3.7 2.7 6.7A4.7 4.7 0 0 1 12 19a4.7 4.7 0 0 1-4.7-4.8c0-3.1 2.1-5.2 4.1-7.2 1.2-1.2 2-2.5 2.1-4.8Z"/><path d="M6 21h12"/></symbol>
+  <symbol id="icon-activity" viewBox="0 0 24 24"><path d="M3 12h4l2.2-6 4.1 12 2.3-6H21"/></symbol>
+  <symbol id="icon-temp" viewBox="0 0 24 24"><path d="M14 14.8V5a4 4 0 0 0-8 0v9.8a5.5 5.5 0 1 0 8 0Z"/><path d="M10 11v6"/></symbol>
+  <symbol id="icon-drop" viewBox="0 0 24 24"><path d="M12 2S5.5 9.2 5.5 14.3a6.5 6.5 0 0 0 13 0C18.5 9.2 12 2 12 2Z"/></symbol>
+  <symbol id="icon-smoke" viewBox="0 0 24 24"><path d="M4 8c2.5-2 4.5 2 7 0s4.5 2 7 0M3 12c3-2 5 2 8 0s5 2 8 0M5 16c2.5-2 4.5 2 7 0s4.5 2 7 0"/></symbol>
+  <symbol id="icon-flame" viewBox="0 0 24 24"><path d="M13.5 2.2c.5 3-1.2 4.2-2.2 5.6-1.1 1.5-1.3 3 .1 4.2-.1-2.1 1.4-3.2 2.5-4.5.2 2.4 2.7 3.7 2.7 6.7A4.7 4.7 0 0 1 12 19a4.7 4.7 0 0 1-4.7-4.8c0-3.1 2.1-5.2 4.1-7.2 1.2-1.2 2-2.5 2.1-4.8Z"/></symbol>
+  <symbol id="icon-trend" viewBox="0 0 24 24"><path d="M4 17 10 11l4 4 6-8"/><path d="M15 7h5v5"/></symbol>
+  <symbol id="icon-fan" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10c-1-4 .5-7 3-7 2 0 3 2 2.4 3.8C16.7 9 14 10 12 10ZM14 12c4-1 7 .5 7 3 0 2-2 3-3.8 2.4C15 16.7 14 14 14 12ZM12 14c1 4-.5 7-3 7-2 0-3-2-2.4-3.8C7.3 15 10 14 12 14ZM10 12c-4 1-7-.5-7-3 0-2 2-3 3.8-2.4C9 7.3 10 10 10 12Z"/></symbol>
+  <symbol id="icon-pump" viewBox="0 0 24 24"><path d="M4 9h11v10H4zM15 12h3l2 2v5h-5M7 9V5h5v4M2 19h20"/><circle cx="8" cy="14" r="2"/></symbol>
+  <symbol id="icon-bell" viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 7h18s-3 0-3-7ZM10 20h4"/></symbol>
+  <symbol id="icon-alert" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 9v5M12 17h.01"/></symbol>
+  <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></symbol>
+  <symbol id="icon-chevron" viewBox="0 0 24 24"><path d="m8 10 4 4 4-4"/></symbol>
+  <symbol id="icon-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+  <symbol id="icon-logout" viewBox="0 0 24 24"><path d="M10 4H5v16h5M14 8l4 4-4 4M8 12h10"/></symbol>
+</svg>
+
+<div class="app-shell" (click)="notificationOpen = false">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark"><svg><use href="#icon-brand"></use></svg></span>
+      <span class="brand-copy"><strong>An Tâm</strong><small>Giám sát an toàn cháy</small></span>
+    </div>
+
+    <div class="header-actions">
+      <span class="overall-status" [ngClass]="stateTone"><i></i>{{ stateLabel }}</span>
+      <div class="notification-wrap" (click)="$event.stopPropagation()">
+        <button class="icon-button notification-button" type="button" (click)="toggleNotificationCenter()"
+                [attr.aria-expanded]="notificationOpen" aria-label="Mở trung tâm thông báo">
+          <svg><use href="#icon-bell"></use></svg>
+          <span class="notification-count" *ngIf="unreadNotificationCount">{{ unreadNotificationCount > 99 ? '99+' : unreadNotificationCount }}</span>
+        </button>
+
+        <aside class="notification-center" *ngIf="notificationOpen" aria-label="Trung tâm thông báo">
+          <div class="notification-heading">
+            <div><strong>Thông báo</strong><small>{{ unreadNotificationCount }} chưa xem</small></div>
+            <button type="button" (click)="markAllNotificationsRead()" [disabled]="!unreadNotificationCount">Đánh dấu đã đọc</button>
+          </div>
+          <label class="important-toggle">
+            <input type="checkbox" [(ngModel)]="importantNotificationsOnly">
+            <span>Chỉ xem cảnh báo quan trọng</span>
+          </label>
+          <div class="notification-list" *ngIf="visibleNotifications.length; else noNotifications">
+            <button class="notification-item" type="button" *ngFor="let item of visibleNotifications"
+                    [class.unread]="!item.read" [ngClass]="severityTone(item.severity)" (click)="openNotification(item)">
+              <span class="notification-icon"><svg><use [attr.href]="item.severity === 'CRITICAL' ? '#icon-flame' : '#icon-bell'"></use></svg></span>
+              <span><strong>{{ item.title }}</strong><small>{{ item.message }}</small><time>{{ item.createdAt | date:'dd/MM, HH:mm' }}</time></span>
+              <i *ngIf="!item.read"></i>
+            </button>
+          </div>
+          <ng-template #noNotifications><div class="notification-empty">Chưa có thông báo phù hợp.</div></ng-template>
+        </aside>
+      </div>
+      <div class="user-chip"><span>{{ userInitial }}</span><div><strong>{{ username }}</strong><small>{{ role === 'ADMIN' ? 'Quản trị viên' : 'Người theo dõi' }}</small></div></div>
+      <button class="icon-button" type="button" (click)="logout()" aria-label="Đăng xuất" title="Đăng xuất"><svg><use href="#icon-logout"></use></svg></button>
+    </div>
+  </header>
+
+  <div class="toast-stack" aria-live="polite" aria-atomic="false">
+    <article class="toast" *ngFor="let toast of toasts" [ngClass]="severityTone(toast.severity)">
+      <span class="toast-icon"><svg><use [attr.href]="toast.severity === 'CRITICAL' ? '#icon-flame' : '#icon-bell'"></use></svg></span>
+      <div><strong>{{ toast.title }}</strong><p>{{ toast.message }}</p></div>
+      <button type="button" (click)="dismissToast(toast.id)" aria-label="Đóng thông báo"><svg><use href="#icon-close"></use></svg></button>
+    </article>
+  </div>
+
+  <main class="dashboard">
+    <section class="critical-banner" *ngIf="isCriticalState" role="alert">
+      <span class="critical-icon"><svg><use href="#icon-flame"></use></svg></span>
+      <div><strong>{{ stateLabel }}</strong><p>{{ stateDescription }}</p></div>
+      <span class="critical-area">{{ selectedDeviceName }}</span>
+    </section>
+
+    <section class="notice error-notice" *ngIf="apiError"><svg><use href="#icon-alert"></use></svg><span>{{ apiError }}</span></section>
+    <section class="notice reconnect-notice" *ngIf="realtimeError"><svg><use href="#icon-activity"></use></svg><span>{{ realtimeError }}</span></section>
+    <section class="notice permission-notice" *ngIf="notificationPermissionDenied"><svg><use href="#icon-bell"></use></svg><span>Thông báo hệ thống đang tắt. Hãy bật thông báo cho “Giám sát an toàn” trong Cài đặt Android để nhận cảnh báo khi app đóng.</span></section>
+    <section class="loading-card" *ngIf="loading"><span class="spinner"></span><span>Đang cập nhật dữ liệu an toàn...</span></section>
+
+    <section class="status-card card" [ngClass]="stateTone" *ngIf="device as selected">
+      <div class="status-copy">
+        <div class="status-kicker"><span class="live-dot" [class.online]="isOnline"></span>{{ selectedDeviceName }}</div>
+        <h1>{{ stateLabel }}</h1>
+        <p>{{ stateDescription }}</p>
+        <span class="last-update" *ngIf="lastSeen">Cập nhật gần nhất {{ lastSeen | date:'HH:mm:ss, dd/MM/yyyy' }}</span>
+        <span class="last-update" *ngIf="!lastSeen">Chưa nhận được dữ liệu</span>
+      </div>
+      <div class="status-overview">
+        <div class="mode-summary"><small>Chế độ vận hành</small><strong>{{ modeLabel }}</strong></div>
+        <div class="actuator-grid">
+          <div class="actuator" [class.active]="latest?.fanOn"><span><svg><use href="#icon-fan"></use></svg></span><div><small>Quạt thông gió</small><strong>{{ latest?.fanOn ? 'Đang bật' : 'Đang tắt' }}</strong></div></div>
+          <div class="actuator pump" [class.active]="latest?.pumpOn"><span><svg><use href="#icon-pump"></use></svg></span><div><small>Bơm chữa cháy</small><strong>{{ latest?.pumpOn ? 'Đang bật' : 'Đang tắt' }}</strong></div></div>
+          <div class="actuator alarm" [class.active]="latest?.buzzerOn"><span><svg><use href="#icon-bell"></use></svg></span><div><small>Còi báo</small><strong>{{ latest?.buzzerOn ? 'Đang bật' : 'Đang tắt' }}</strong></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="empty-state card" *ngIf="!loading && device && !latest">
+      <svg><use href="#icon-activity"></use></svg><div><strong>Đang chờ dữ liệu</strong><p>Thông tin sẽ xuất hiện khi thiết bị giám sát kết nối.</p></div>
+    </section>
+
+    <section class="section-block" *ngIf="latest as data">
+      <div class="section-heading"><div><span>Tổng quan môi trường</span><h2>Các chỉ số quan trọng</h2></div><span class="quality-pill" [class.error]="!data.dhtOk"><i></i>{{ data.dhtOk ? 'Dữ liệu ổn định' : 'Thiếu dữ liệu nhiệt độ' }}</span></div>
+      <div class="sensor-grid" [class.stale]="!isOnline">
+        <article class="sensor-card" [ngClass]="temperatureTone"><span class="sensor-icon"><svg><use href="#icon-temp"></use></svg></span><div><small>Nhiệt độ</small><strong>{{ data.temperature ?? '--' }}<em>°C</em></strong><p>{{ temperatureDescription }}</p></div></article>
+        <article class="sensor-card metric-info"><span class="sensor-icon"><svg><use href="#icon-drop"></use></svg></span><div><small>Độ ẩm</small><strong>{{ data.humidity ?? '--' }}<em>%</em></strong><p>{{ data.humidity == null ? 'Chưa có dữ liệu' : 'Độ ẩm môi trường' }}</p></div></article>
+        <article class="sensor-card" [ngClass]="smokeTone"><span class="sensor-icon"><svg><use href="#icon-smoke"></use></svg></span><div><small>Khói / khí</small><strong class="word-value">{{ data.smokeLevel === 'CRITICAL' ? 'Nguy hiểm' : data.smokeLevel === 'WARNING' ? 'Cần chú ý' : 'An toàn' }}</strong><p>{{ smokeDescription }}</p></div></article>
+        <article class="sensor-card" [ngClass]="flameTone"><span class="sensor-icon"><svg><use href="#icon-flame"></use></svg></span><div><small>Cảm biến lửa</small><strong class="word-value">{{ data.flameConfirmed ? 'Có lửa' : data.flameDetected ? 'Nghi ngờ' : 'An toàn' }}</strong><p>{{ flameDescription }}</p></div></article>
+        <article class="sensor-card metric-purple"><span class="sensor-icon"><svg><use href="#icon-trend"></use></svg></span><div><small>Xu hướng nhiệt</small><strong>{{ data.temperatureRate ?? '--' }}<em>°C/s</em></strong><p>{{ heatRateDescription }}</p></div></article>
+      </div>
+    </section>
+
+    <section class="workspace-grid" [class.chart-only]="role !== 'ADMIN'">
+      <article class="control-panel card" *ngIf="role === 'ADMIN'">
+        <div class="card-heading"><div><span>Điều khiển</span><h2>Thiết bị an toàn</h2></div><span class="ready-pill" [class.ready]="isOnline && !commandBusy">{{ commandBusy ? 'Đang gửi...' : isOnline ? 'Sẵn sàng' : 'Mất kết nối' }}</span></div>
+        <div class="control-hint" *ngIf="!isOnline"><svg><use href="#icon-alert"></use></svg><span>Không thể điều khiển khi thiết bị đang mất kết nối.</span></div>
+        <div class="control-hint safety" *ngIf="isOnline && buzzerSafetyMessage"><svg><use href="#icon-bell"></use></svg><span>{{ buzzerSafetyMessage }}</span></div>
+
+        <div class="control-list">
+          <div class="control-row"><div class="control-name"><span class="control-icon mode">A</span><div><strong>Chế độ vận hành</strong><small>Chọn cách hệ thống hoạt động</small></div></div><div class="toggle-group"><button type="button" (click)="setMode('AUTO')" [class.active]="currentMode === 'AUTO'" [disabled]="controlsDisabled">Tự động</button><button type="button" (click)="setMode('MANUAL')" [class.active]="currentMode === 'MANUAL'" [disabled]="controlsDisabled">Thủ công</button></div></div>
+          <div class="control-row"><div class="control-name"><span class="control-icon"><svg><use href="#icon-fan"></use></svg></span><div><strong>Quạt thông gió</strong><small>{{ latest?.fanOn ? 'Đang hoạt động' : 'Đang tắt' }}</small></div></div><div class="toggle-group"><button type="button" (click)="send('FAN_ON')" [class.active]="latest?.fanOn" [disabled]="fanOnDisabled()">Bật</button><button type="button" (click)="send('FAN_OFF')" [class.active]="latest && !latest.fanOn" [disabled]="controlsDisabled">Tắt</button></div></div>
+          <div class="control-row"><div class="control-name"><span class="control-icon pump"><svg><use href="#icon-pump"></use></svg></span><div><strong>Bơm chữa cháy</strong><small>{{ latest?.pumpOn ? 'Đang hoạt động' : 'Đang tắt' }}</small></div></div><div class="toggle-group"><button type="button" (click)="send('PUMP_ON')" [class.active]="latest?.pumpOn" [disabled]="pumpOnDisabled()">Bật</button><button type="button" (click)="send('PUMP_OFF')" [class.active]="latest && !latest.pumpOn" [disabled]="pumpOffDisabled()">Tắt</button></div></div>
+          <div class="control-row"><div class="control-name"><span class="control-icon alarm"><svg><use href="#icon-bell"></use></svg></span><div><strong>Còi cảnh báo</strong><small>{{ latest?.buzzerOn ? 'Đang hoạt động' : 'Đang tắt' }}</small></div></div><div class="toggle-group" [attr.title]="buzzerTooltip('BUZZER_OFF') || buzzerTooltip('BUZZER_ON')"><button type="button" (click)="send('BUZZER_ON')" [class.active]="latest?.buzzerOn" [disabled]="buzzerOnDisabled()">Bật</button><button type="button" (click)="send('BUZZER_OFF')" [class.active]="latest && !latest.buzzerOn" [disabled]="buzzerOffDisabled()">Tắt</button></div></div>
+        </div>
+
+        <button class="reset-button" type="button" (click)="resetAlarm()" [disabled]="controlsDisabled || currentState !== 'POST_FIRE'"><svg><use href="#icon-bell"></use></svg><span><strong>Đặt lại cảnh báo</strong><small>Chỉ dùng sau khi đã xác nhận hệ thống an toàn</small></span></button>
+        <div class="command-status" *ngIf="lastCommand as command" [ngClass]="commandTone(command.status)" aria-live="polite"><i></i><div><small>Thao tác gần nhất</small><strong>{{ commandLabel(command.command) }} · {{ commandStatusLabel(command.status) }}</strong><p *ngIf="command.reason">{{ command.reason }}</p></div></div>
+      </article>
+
+      <article class="chart-panel card">
+        <div class="card-heading"><div><span>Biến động gần đây</span><h2>Xu hướng theo thời gian</h2></div><div class="chart-current"><small>Hiện tại</small><strong>{{ chartCurrentValue }}</strong></div></div>
+        <div class="chart-tabs" role="tablist"><button type="button" (click)="selectChartMetric('temperature')" [class.active]="chartMetric === 'temperature'">Nhiệt độ</button><button type="button" (click)="selectChartMetric('humidity')" [class.active]="chartMetric === 'humidity'">Độ ẩm</button><button type="button" (click)="selectChartMetric('smoke')" [class.active]="chartMetric === 'smoke'">Khói / khí</button></div>
+        <div class="chart-meta"><span><i [ngClass]="chartMetric"></i>{{ chartTitle }}</span><small>{{ readings.length }} lần cập nhật gần nhất</small></div>
+        <div class="chart-canvas"><canvas #metricChart></canvas></div>
+        <div class="chart-empty" *ngIf="!readings.length">Chưa có đủ dữ liệu để hiển thị biểu đồ.</div>
+      </article>
+    </section>
+
+    <section class="activity-panel card" id="activity-center">
+      <div class="card-heading activity-heading"><div><span>Hoạt động gần đây</span><h2>Cảnh báo và lịch sử</h2><p>Hiển thị tối đa 5 mục mỗi trang để bạn dễ theo dõi.</p></div><span class="activity-count">{{ filteredActivities.length }} mục</span></div>
+      <div class="activity-tabs" role="tablist" aria-label="Lọc loại hoạt động">
+        <button type="button" (click)="setActivityType('ALL')" [class.active]="activityType === 'ALL'">Tất cả</button>
+        <button type="button" (click)="setActivityType('ALERT')" [class.active]="activityType === 'ALERT'">Cảnh báo</button>
+        <button type="button" (click)="setActivityType('SYSTEM')" [class.active]="activityType === 'SYSTEM'">Hệ thống</button>
+        <button type="button" (click)="setActivityType('CONTROL')" [class.active]="activityType === 'CONTROL'">Điều khiển</button>
+      </div>
+      <div class="activity-tools">
+        <label class="search-field"><svg><use href="#icon-search"></use></svg><input type="search" [(ngModel)]="activitySearch" (ngModelChange)="activityFiltersChanged()" placeholder="Tìm nội dung lịch sử" aria-label="Tìm kiếm lịch sử"></label>
+        <select [(ngModel)]="activitySeverity" (change)="activityFiltersChanged()" aria-label="Lọc mức độ"><option value="ALL">Mọi mức độ</option><option value="NORMAL">Bình thường</option><option value="INFO">Thông báo</option><option value="WARNING">Cảnh báo</option><option value="CRITICAL">Nguy hiểm</option></select>
+        <select [(ngModel)]="activitySort" (change)="activityFiltersChanged()" aria-label="Sắp xếp"><option value="NEWEST">Mới nhất</option><option value="OLDEST">Cũ nhất</option><option value="SEVERITY">Mức độ cao trước</option></select>
+      </div>
+
+      <div class="activity-list" *ngIf="pagedActivities.length; else noActivities">
+        <article class="activity-item" *ngFor="let item of pagedActivities; trackBy: trackByActivity" [ngClass]="severityTone(item.severity)">
+          <span class="activity-icon"><svg><use [attr.href]="item.category === 'CONTROL' ? '#icon-activity' : item.severity === 'CRITICAL' ? '#icon-flame' : '#icon-bell'"></use></svg></span>
+          <div class="activity-content"><div class="activity-title"><strong>{{ item.title }}</strong><span class="severity-badge" [ngClass]="severityTone(item.severity)">{{ severityLabel(item.severity) }}</span></div><p [class.expanded]="item.expanded">{{ item.message }}</p><div class="activity-meta"><span>{{ item.deviceName }}</span><time>{{ item.createdAt | date:'HH:mm, dd/MM/yyyy' }}</time><span>{{ categoryLabel(item.category) }}</span></div></div>
+          <button class="expand-button" type="button" (click)="toggleActivity(item)" [attr.aria-expanded]="item.expanded" aria-label="Xem chi tiết"><svg [class.rotated]="item.expanded"><use href="#icon-chevron"></use></svg></button>
+        </article>
+      </div>
+      <ng-template #noActivities><div class="activity-empty"><svg><use href="#icon-search"></use></svg><strong>Không tìm thấy hoạt động phù hợp</strong><span>Thử thay đổi bộ lọc hoặc từ khóa.</span></div></ng-template>
+      <div class="pagination" *ngIf="filteredActivities.length"><span>Trang {{ activityPage }} / {{ activityTotalPages }}</span><div><button type="button" (click)="previousActivityPage()" [disabled]="activityPage <= 1">Trước</button><button type="button" (click)="nextActivityPage()" [disabled]="activityPage >= activityTotalPages">Sau</button></div></div>
+    </section>
+  </main>
+</div>
