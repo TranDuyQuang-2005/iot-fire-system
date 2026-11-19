@@ -113,7 +113,7 @@ async function login(request: Request, env: Env): Promise<Response> {
 }
 
 export async function publishCommand(env: Env, deviceId: string, commandId: string, command: string): Promise<void> {
-  const response = await fetch(`${env.EMQX_API_URL.replace(/\/$/, "")}/api/v5/publish`, {
+  const response = await fetch(`${env.EMQX_API_URL.replace(/\/$/, "")}/publish`, {
     method: "POST",
     headers: {
       Authorization: `Basic ${btoa(`${env.EMQX_API_KEY}:${env.EMQX_API_SECRET}`)}`,
@@ -209,6 +209,17 @@ async function api(request: Request, env: Env, url: URL): Promise<Response> {
     if (url.searchParams.get("from")) query.set("CreatedAt", `gte.${checkedDate(url.searchParams.get("from")!)}`);
     if (url.searchParams.get("to")) query.append("CreatedAt", `lte.${checkedDate(url.searchParams.get("to")!)}`);
     const result = await db.selectWithCount(table, query);
+    return new Response(JSON.stringify(camelize(result.rows)), { headers: { "Content-Type": "application/json", "X-Total-Count": String(result.total) } });
+  }
+  if (url.pathname === "/api/commands" && request.method === "GET") {
+    const page = Math.max(1, Number(url.searchParams.get("page") ?? "1"));
+    const pageSize = Math.min(500, Math.max(1, Number(url.searchParams.get("pageSize") ?? "100")));
+    const query = new URLSearchParams({ select: "*,Device:Devices!inner(*)", order: "RequestedAt.desc", offset: String((page - 1) * pageSize), limit: String(pageSize) });
+    const deviceId = url.searchParams.get("deviceId");
+    if (deviceId) { if (!validDeviceId(deviceId)) throw new HttpError(400, "Invalid deviceId"); query.set("Device.DeviceCode", eq(deviceId)); }
+    const status = url.searchParams.get("status");
+    if (status) query.set("Status", eq(status.slice(0, 30)));
+    const result = await db.selectWithCount("Commands", query);
     return new Response(JSON.stringify(camelize(result.rows)), { headers: { "Content-Type": "application/json", "X-Total-Count": String(result.total) } });
   }
   const eventById = url.pathname.match(/^\/api\/events\/(\d+)$/);

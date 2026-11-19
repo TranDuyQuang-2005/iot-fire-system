@@ -31,17 +31,17 @@ Authenticate Wrangler only when deployment is intended, then provision each valu
 
 ```powershell
 npx wrangler login
-npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
-npx wrangler secret put JWT_SECRET
-npx wrangler secret put EMQX_WEBHOOK_SECRET
-npx wrangler secret put EMQX_API_URL
-npx wrangler secret put EMQX_API_KEY
-npx wrangler secret put EMQX_API_SECRET
-npx wrangler secret put FIREBASE_CLIENT_EMAIL
-npx wrangler secret put FIREBASE_PRIVATE_KEY
+npx wrangler versions secret put SUPABASE_SECRET_KEY
+npx wrangler versions secret put JWT_SECRET
+npx wrangler versions secret put EMQX_WEBHOOK_SECRET
+npx wrangler versions secret put EMQX_API_URL
+npx wrangler versions secret put EMQX_API_KEY
+npx wrangler versions secret put EMQX_API_SECRET
+npx wrangler versions secret put FIREBASE_CLIENT_EMAIL
+npx wrangler versions secret put FIREBASE_PRIVATE_KEY
 ```
 
-`JWT_SECRET` should match the existing ASP.NET production signing secret if existing sessions must remain valid. The Firebase values are individual service-account fields; never copy the service-account JSON into this directory.
+`SUPABASE_SECRET_KEY` should use the current server-side `sb_secret_...` key. The implementation retains legacy-JWT header behavior only when an older key is supplied, but new deployments should use the current key type. `JWT_SECRET` should match the existing ASP.NET production signing secret if existing sessions must remain valid. The Firebase values are individual service-account fields; never copy the service-account JSON into this directory.
 
 ## EMQX configuration after deployment
 

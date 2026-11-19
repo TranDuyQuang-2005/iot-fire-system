@@ -1,5 +1,5 @@
 # Local placeholders only. Copy to .dev.vars and never commit the populated file.
-SUPABASE_SERVICE_ROLE_KEY="replace-locally"
+SUPABASE_SECRET_KEY="replace-locally"
 JWT_SECRET="replace-with-at-least-32-random-characters"
 EMQX_WEBHOOK_SECRET="replace-with-a-random-shared-secret"
 EMQX_API_URL="https://replace-with-your-emqx-api-host"

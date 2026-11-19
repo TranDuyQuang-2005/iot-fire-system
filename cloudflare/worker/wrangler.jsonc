@@ -15,6 +15,18 @@
     "DEVICE_OFFLINE_SECONDS": "15",
     "RAW_RETENTION_DAYS": "30"
   },
+  "secrets": {
+    "required": [
+      "SUPABASE_SECRET_KEY",
+      "JWT_SECRET",
+      "EMQX_WEBHOOK_SECRET",
+      "EMQX_API_URL",
+      "EMQX_API_KEY",
+      "EMQX_API_SECRET",
+      "FIREBASE_CLIENT_EMAIL",
+      "FIREBASE_PRIVATE_KEY"
+    ]
+  },
   "durable_objects": {
     "bindings": [
       { "name": "REALTIME", "class_name": "RealtimeCoordinator" }

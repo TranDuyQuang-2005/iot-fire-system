@@ -42,11 +42,13 @@ export class SupabaseRest {
   }
 
   private async fetch(table: string, query: URLSearchParams, init: RequestInit): Promise<Response> {
+    const keyHeaders: Record<string, string> = { apikey: this.env.SUPABASE_SECRET_KEY };
+    if (!this.env.SUPABASE_SECRET_KEY.startsWith("sb_secret_"))
+      keyHeaders.Authorization = `Bearer ${this.env.SUPABASE_SECRET_KEY}`;
     const response = await fetch(`${this.env.SUPABASE_URL}/rest/v1/${encodeURIComponent(table)}?${query}`, {
       ...init,
       headers: {
-        apikey: this.env.SUPABASE_SERVICE_ROLE_KEY,
-        Authorization: `Bearer ${this.env.SUPABASE_SERVICE_ROLE_KEY}`,
+        ...keyHeaders,
         "Content-Type": "application/json",
         ...(init.headers ?? {})
       }

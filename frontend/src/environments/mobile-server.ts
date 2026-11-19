@@ -1,2 +1,2 @@
-// Do not build an Android release until this is the verified Worker HTTPS origin.
-export const mobileServerUrl = 'https://configure-iot-fire-worker.invalid';
+// Verified Worker origin; signed Android release remains gated on full cloud smoke tests.
+export const mobileServerUrl = 'https://iot-fire-worker.duyquang022005.workers.dev';

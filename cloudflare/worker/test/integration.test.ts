@@ -2,12 +2,21 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import worker, { handleCommandResponse, publishCommand } from "../src/index";
 import { fcmPayload } from "../src/fcm";
 import { RealtimeCoordinator } from "../src/realtime";
+import { SupabaseRest } from "../src/supabase";
 import type { RuntimeState } from "../src/types";
 import { env, telemetry } from "./fixtures";
 
 afterEach(() => vi.restoreAllMocks());
 
 describe("Worker integration units", () => {
+  it("sends current Supabase secret keys only as apikey headers", async () => {
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(Response.json([]));
+    await new SupabaseRest(env()).select("Devices", new URLSearchParams({ select: "Id" }));
+    const headers = new Headers(fetchMock.mock.calls[0]![1]?.headers);
+    expect(headers.get("apikey")).toBe("sb_secret_test-only-placeholder");
+    expect(headers.has("Authorization")).toBe(false);
+  });
+
   it("rejects unauthenticated and malformed telemetry webhooks", async () => {
     const config = env();
     const missing = await worker.fetch!(new Request("https://worker.test/webhooks/emqx/telemetry", { method: "POST", body: JSON.stringify(telemetry) }) as Request<unknown, IncomingRequestCfProperties>, config, {} as ExecutionContext);
@@ -20,7 +29,7 @@ describe("Worker integration units", () => {
     const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(null, { status: 202 }));
     await publishCommand(env(), "ESP32_001", "a".repeat(32), "PUMP_ON");
     const [url, init] = fetchMock.mock.calls[0]!;
-    expect(String(url)).toBe("https://example.emqxsl.com/api/v5/publish");
+    expect(String(url)).toBe("https://example.emqxsl.com/publish");
     const body = JSON.parse(String(init?.body));
     expect(body.topic).toBe("iot/fire/device/ESP32_001/command");
     expect(JSON.parse(body.payload)).toEqual({ commandId: "a".repeat(32), command: "PUMP_ON" });

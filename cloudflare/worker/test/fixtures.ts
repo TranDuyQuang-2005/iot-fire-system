@@ -22,7 +22,7 @@ export const telemetry: Telemetry = {
 export function env(overrides: Partial<Env> = {}): Env {
   return {
     SUPABASE_URL: "https://lmmqianbtgivdobqouwr.supabase.co",
-    SUPABASE_SERVICE_ROLE_KEY: "test-service-key",
+    SUPABASE_SECRET_KEY: "sb_secret_test-only-placeholder",
     JWT_SECRET: "test-jwt-secret-at-least-32-characters",
     JWT_ISSUER: "IotFire",
     JWT_AUDIENCE: "IotFireClient",

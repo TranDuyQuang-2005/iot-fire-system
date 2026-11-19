@@ -1,6 +1,6 @@
 export interface Env {
   SUPABASE_URL: string;
-  SUPABASE_SERVICE_ROLE_KEY: string;
+  SUPABASE_SECRET_KEY: string;
   JWT_SECRET: string;
   JWT_ISSUER: string;
   JWT_AUDIENCE: string;
