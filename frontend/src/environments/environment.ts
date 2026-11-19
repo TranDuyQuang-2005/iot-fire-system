@@ -1,12 +1,15 @@
 import { Capacitor } from '@capacitor/core';
+import { mobileServerUrl } from './mobile-server';
+import { webServerUrl } from './web-server';
 
-// Public HTTPS endpoint used only by the native Capacitor application.
-// Web deployments keep using same-origin /api and /iotHub through the existing proxy.
-const mobileServerUrl = 'https://laptop-jq3b9t7h.tailb58134.ts.net';
-const serverUrl = Capacitor.isNativePlatform() ? mobileServerUrl : '';
+const localWebHosts = new Set(['localhost', '127.0.0.1']);
+const isLocalWeb = !Capacitor.isNativePlatform() && localWebHosts.has(window.location.hostname);
+const serverUrl = Capacitor.isNativePlatform() ? mobileServerUrl : (isLocalWeb ? '' : webServerUrl);
 
 export const environment = {
   mobileServerUrl,
+  webServerUrl,
   apiBaseUrl: `${serverUrl}/api`,
-  signalRUrl: `${serverUrl}/iotHub`
+  realtimeUrl: `${serverUrl.replace(/^http/, 'ws')}/realtime`,
+  realtimeDeviceId: 'ESP32_001'
 };

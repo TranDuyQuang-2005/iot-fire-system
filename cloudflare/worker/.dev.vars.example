@@ -1,0 +1,9 @@
+# Local placeholders only. Copy to .dev.vars and never commit the populated file.
+SUPABASE_SERVICE_ROLE_KEY="replace-locally"
+JWT_SECRET="replace-with-at-least-32-random-characters"
+EMQX_WEBHOOK_SECRET="replace-with-a-random-shared-secret"
+EMQX_API_URL="https://replace-with-your-emqx-api-host"
+EMQX_API_KEY="replace-locally"
+EMQX_API_SECRET="replace-locally"
+FIREBASE_CLIENT_EMAIL="replace-locally"
+FIREBASE_PRIVATE_KEY="replace-locally"

@@ -53,7 +53,7 @@ constexpr unsigned long FIRE_TO_SUPPRESSING_MS = 1000;
 constexpr unsigned long PUMP_MAX_RUNTIME_MS = 30000;
 
 constexpr unsigned long SENSOR_INTERVAL_MS = 2000; // DHT22 nên đọc khoảng >= 2 giây/lần
-constexpr unsigned long TELEMETRY_INTERVAL_MS = 2000;
+constexpr unsigned long TELEMETRY_INTERVAL_MS = 4000;
 constexpr unsigned long SERIAL_INTERVAL_MS = 2000;
 constexpr unsigned long OLED_INTERVAL_MS = 500;
 constexpr unsigned long GREEN_BLINK_INTERVAL_MS = 2000;

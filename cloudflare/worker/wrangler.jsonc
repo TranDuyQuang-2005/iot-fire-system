@@ -1,0 +1,30 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "iot-fire-worker",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-19",
+  "workers_dev": true,
+  "vars": {
+    "SUPABASE_URL": "https://lmmqianbtgivdobqouwr.supabase.co",
+    "JWT_ISSUER": "IotFire",
+    "JWT_AUDIENCE": "IotFireClient",
+    "JWT_EXPIRES_SECONDS": "3600",
+    "FIREBASE_PROJECT_ID": "iot-fire-monitoring-85448",
+    "ALLOWED_ORIGINS": "https://iot-fire-monitoring-85448.web.app,https://iot-fire-monitoring-85448.firebaseapp.com,capacitor://localhost",
+    "TELEMETRY_PERSIST_SECONDS": "10",
+    "DEVICE_OFFLINE_SECONDS": "15",
+    "RAW_RETENTION_DAYS": "30"
+  },
+  "durable_objects": {
+    "bindings": [
+      { "name": "REALTIME", "class_name": "RealtimeCoordinator" }
+    ]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["RealtimeCoordinator"] }
+  ],
+  "triggers": {
+    "crons": ["17 3 * * *"]
+  },
+  "observability": { "enabled": true }
+}
